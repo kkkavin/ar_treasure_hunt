@@ -74,7 +74,7 @@ public class ball : MonoBehaviour
     public void ResetBall()
     {
         rb.isKinematic = true;
-        rb.linearVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         transform.position = initialPosition;
         hasThrown = false;
