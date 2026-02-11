@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "AR_Treasure_Hunt.sln"
+    "dotnet.defaultSolution": "AR_Treasure_Hunt.sln",
+    "vscode-autoGit.enabled": true
 }
