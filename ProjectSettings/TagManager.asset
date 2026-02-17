@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ghost
+  - Power
   layers:
   - Default
   - TransparentFX
