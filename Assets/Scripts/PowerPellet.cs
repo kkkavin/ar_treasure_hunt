@@ -8,7 +8,7 @@ public class PowerPellet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = 
     }
 
     // Update is called once per frame
