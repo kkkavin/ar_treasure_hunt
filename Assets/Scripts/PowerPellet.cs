@@ -15,5 +15,6 @@ public class PowerPellet : MonoBehaviour
     void Update()
     {
         transform.rotate(0,0,rotSpeed * time.deltaTime);
+        
     }
 }
