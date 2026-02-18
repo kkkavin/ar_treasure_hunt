@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.CompareTag("Ghost"))
         {
-            if gom.ShowGameOver();
+            if (gom != null) gom.ShowGameOver();
         }
     }
 }
