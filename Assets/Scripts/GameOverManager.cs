@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement; // Required to restart the game
 
 public class GameOverManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject gameOverPanel; // Drag your Panel here in Inspector
+
+    public void ShowGameOver()
     {
-        
+        gameOverPanel.SetActive(true); // Shows the screen
+        Time.timeScale = 0f; // Optional: Pauses the game
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RestartGame()
     {
-        
+        Time.timeScale = 1f; // Resume time
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reloads the current scene
     }
 }
