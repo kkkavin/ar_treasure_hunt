@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collision collision)
     {
-        if (collision.CompareTag("Power"));
+        if (collision.CompareTag("Power"))
         {
             Destroy(collision.gameObject);
         }
