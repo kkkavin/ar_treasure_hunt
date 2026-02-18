@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.CompareTag("Ghost"))
         {
-            Gam
+            GameOverManager
         }
     }
 }
