@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Power"))
         {
-            
+            Destroy(collision.gameObject);
         }
     }
 }
