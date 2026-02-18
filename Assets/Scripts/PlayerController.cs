@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.compare)
+        if (collision.gameObject.CompareTag("Power"))
+        {
+            
+        }
     }
 }
