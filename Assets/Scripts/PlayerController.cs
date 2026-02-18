@@ -14,4 +14,9 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = new Vector3(input.x, 0, input.y) * speed;
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        
+    }
 }
