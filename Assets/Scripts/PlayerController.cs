@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject GameManager;
     public float speed = 10f;
     public Rigidbody rb;
     void Update()
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.CompareTag("Ghost"))
         {
-            
+            Gam
         }
     }
 }
