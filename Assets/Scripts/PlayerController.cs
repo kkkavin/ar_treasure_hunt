@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     public GameOverManager gom;
     public float speed = 10f;
+    public int score = 0;
     public Rigidbody rb;
     void Update()
     {
@@ -21,10 +22,15 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Power"))
         {
             Destroy(collision.gameObject);
+            score += 1;
         }
         if (collision.CompareTag("Ghost"))
         {
             if (gom != null) gom.ShowGameOver();
+        }
+        if (score == 4)
+        {
+            if (gom != null) gom.youWin();
         }
     }
 }
