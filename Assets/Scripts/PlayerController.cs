@@ -15,9 +15,9 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(input.x, 0, input.y) * speed;
     }
 
-    void OnTrigger(Collision collision)
+    void OnTriggerEnter(Collision collision)
     {
-        if (collision.CompareTag("Power"))
+        if (collision.CompareTag("Power"));
         {
             Destroy(collision.gameObject);
         }
