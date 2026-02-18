@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
-        if Collider
+        if (collision.CompareTag("Ghost"))
+        {
+            
+        }
     }
 }
