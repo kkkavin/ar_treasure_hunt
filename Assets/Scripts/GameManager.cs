@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Required to restart the game
 
-public class GameOverManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    public GameObject bossPanel;
     public GameObject gameOverPanel; // Drag your Panel here in Inspector
     public GameObject winPanel;
+    public GameObject lvl_1;
+    public GameObject lvl_2;
 
     public void ShowGameOver()
     {
@@ -20,8 +23,23 @@ public class GameOverManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reloads the current scene
     }
 
-    public void youWin()
+    public void enterBoss()
+    {
+        bossPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void gameCompleted()
     {
         winPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void next()
+    {
+        Time.timeScale = 1f;
+        bossPanel.SetActive(false);
+        lvl_1.SetActive(false);
+        lvl_2.SetActive(true);
     }
 }
