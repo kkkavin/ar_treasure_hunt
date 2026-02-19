@@ -25,7 +25,11 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
             score += 1;
         }
-        if (collision.CompareTag("Ghost"))
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ghost")
         {
             if (gom != null) gom.ShowGameOver();
         }
