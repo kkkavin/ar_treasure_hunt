@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GhostSliding : MonoBehaviour
 {
-    public GameObject level;
     public Transform player; // Drag the Player object here in the Inspector
     public float speed = 2.0f;
     private Rigidbody rb;

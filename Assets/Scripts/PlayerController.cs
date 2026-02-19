@@ -6,9 +6,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public bool isBoss;
-    public GameManager gom;
+    public GameManager gm;
     public float speed = 10f;
-    public int score = 0;
     public Rigidbody rb;
     void Update()
     {
@@ -22,8 +21,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Power"))
         {
-            Destroy(collision.gameObject);
-            score += 1;
+            collision.gameObject.SetActive(false);
+            gm.score += 1;
         }
     }
 
@@ -31,15 +30,15 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ghost")
         {
-            if (gom != null) gom.ShowGameOver();
+            if (gm != null) gm.ShowGameOver();
         }
-        if (score == 4 && isBoss == false)
+        if (gm.score == 4 && isBoss == false)
         {
-            if (gom != null) gom.enterBoss();
+            if (gm != null) gm.enterBoss();
         }
-        else if (score == 4 && isBoss)
+        else if (gm.score == 4 && isBoss)
         {
-            if (gom != null) gom.gameCompleted();
+            if (gm != null) gm.gameCompleted();
         }
     }
 }
