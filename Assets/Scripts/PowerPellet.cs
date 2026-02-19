@@ -14,6 +14,6 @@ public class PowerPellet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0, 0, rotSpeed * Time.deltaTime);
+        transform.Rotate(0, 0, rotSpeed++ * Time.deltaTime);
     }
 }

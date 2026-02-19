@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameOverManager gom;
+    public bool isBoss;
+    public GameManager gom;
     public float speed = 10f;
     public int score = 0;
     public Rigidbody rb;
@@ -28,9 +29,13 @@ public class PlayerController : MonoBehaviour
         {
             if (gom != null) gom.ShowGameOver();
         }
-        if (score == 4)
+        if (score == 4 && isBoss == false)
         {
-            if (gom != null) gom.youWin();
+            if (gom != null) gom.enterBoss();
+        }
+        else if (score == 4 && isBoss)
+        {
+            if (gom != null) gom.gameCompleted();
         }
     }
 }
