@@ -6,68 +6,88 @@ using UnityEngine.SocialPlatforms.Impl; // Required to restart the game
 
 public class GameManager : MonoBehaviour
 {
-    public int score;
-    public GameObject bossPanel;
-    public GameObject gameOverPanel; // Drag your Panel here in Inspector
-    public GameObject winPanel;
-    public GameObject lvl_1;
-    public GameObject lvl_2;
-
+    public PlayerController pc;
+    
     [Header("Level Prefabs")]
-    public GameObject[] levelPrefabs; // Slot 0 = Level 1, Slot 1 = Level 2
+    public GameObject level1Prefab; // Drag the 'Level 1' Prefab from Assets here
+    public GameObject level2Prefab; // Drag the 'Level 2' Prefab from Assets here
     
     [Header("UI & References")]
-    public Transform mazeParent; // The AR Image Target or Anchor
-
+    public GameObject gameOverPanel;
+    public GameObject bossPanel;
+    public GameObject winPanel;
+    public Transform mazeParent; 
     public GameObject currentLevelInstance;
-    private int currentLevelIndex = 0; // Tracks which level we are in
+
+    private int currentLevel = 1;
+
+    void Start()
+    {
+        // Initialize Level 1 if nothing is there
+        if(currentLevelInstance == null) RestartCurrentLevel();
+    }
 
     public void RestartCurrentLevel()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; // Always unpause first
 
-        // 1. Clear the old level and player to prevent "physics jumping"
         if (currentLevelInstance != null)
         {
             Destroy(currentLevelInstance);
         }
 
-        // 2. Spawn a fresh copy of the level we were just playing
-        currentLevelInstance = Instantiate(levelPrefabs[currentLevelIndex], mazeParent.position, mazeParent.rotation, mazeParent);
+        // Pick the right prefab to spawn
+        GameObject prefabToSpawn = (currentLevel == 1) ? level1Prefab : level2Prefab;
 
-        // 3. Reset the UI
+        // Spawn a fresh copy from the PREFAB (not the instance)
+        currentLevelInstance = Instantiate(prefabToSpawn, mazeParent.position, mazeParent.rotation, mazeParent);
+
+        pc = currentLevelInstance.GetComponentInChildren<PlayerController>();
+
         gameOverPanel.SetActive(false);
-        
-        Debug.Log("Restarted Level: " + (currentLevelIndex + 1));
     }
 
-    public void ShowGameOver()
-    {
-        score = 0;
-        gameOverPanel.SetActive(true); // Shows the screen
-        Time.timeScale = 0f; // Optional: Pauses the game
-    }
-
-
-    public void enterBoss()
-    {
-        score = 0;
-        bossPanel.SetActive(true);
-        Time.timeScale = 0f;
-    }
-
-    public void gameCompleted()
-    {
-        winPanel.SetActive(true);
-        Time.timeScale = 0f;
-    }
-
-    public void next()
+    // Call this from your "Next Level" button
+    public void LoadLevel2()
     {
         Time.timeScale = 1f;
-        currentLevelIndex++;
         bossPanel.SetActive(false);
-        lvl_1.SetActive(false);
-        lvl_2.SetActive(true);
+    }
+
+    void Update()
+    {
+        // Your existing trigger logic is fine, but ensure 'pc' is linked
+        if (pc != null)
+        {
+            if (pc.ShowGameOver)
+            {
+                if (gameOverPanel != null)
+                {
+                    gameOverPanel.SetActive(true);
+                    Time.timeScale = 0f;
+                }
+                pc.ShowGameOver = false;
+            }
+            if (pc.enterBoss)
+            {
+                if (bossPanel != null)
+                {
+                    bossPanel.SetActive(true);
+                    currentLevel = 2;
+                    RestartCurrentLevel();
+                    Time.timeScale = 0f;
+                }
+                pc.enterBoss = false;
+            }
+            if (pc.gameCompleted)
+            {
+                if (winPanel != null)
+                {
+                    winPanel.SetActive(true);
+                    Time.timeScale = 0f;
+                }
+                pc.gameCompleted = false;
+            }
+        }
     }
 }
