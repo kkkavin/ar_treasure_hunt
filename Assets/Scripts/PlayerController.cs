@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         {
             enterBoss = true;
         }
-        else if (score == 4 && isBoss)
+        if (score == 4 && isBoss)
         {
             gameCompleted = true;
         }
