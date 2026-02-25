@@ -2038,7 +2038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7114210629293976461}
-  speed: 0.1
+  speed: 0.15
   caught: 1
 --- !u!1 &1439453882967613979
 GameObject:
@@ -9764,7 +9764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7114210629293976461}
-  speed: 0.1
+  speed: 0.15
   caught: 1
 --- !u!1 &8111222308571421799
 GameObject:
