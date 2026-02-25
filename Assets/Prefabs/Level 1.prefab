@@ -451,7 +451,7 @@ MonoBehaviour:
   ShowGameOver: 0
   enterBoss: 0
   gameCompleted: 0
-  speed: 0.1
+  speed: 0.15
   rb: {fileID: 2720320684502251820}
 --- !u!1 &183897414228362576
 GameObject:
@@ -3002,7 +3002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &5942639134712801155
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3150,7 +3150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &5322644722450163853
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5344,7 +5344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &5246800216640064569
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9473,7 +9473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &5932355504438653842
 Rigidbody:
   m_ObjectHideFlags: 0

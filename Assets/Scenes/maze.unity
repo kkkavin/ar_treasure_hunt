@@ -802,7 +802,7 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: pacman
+  mTrackableName: maze
   mInitializedInEditor: 1
   mDataSetPath: Vuforia/SonaBatchB.xml
   mAspectRatio: 1
@@ -2028,7 +2028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mObserverBehaviour: {fileID: 1712250073169815496}
   mHiddenRoot: {fileID: 0}
-  mTargetName: pacman
+  mTargetName: maze
   mDatasetName: Vuforia/SonaBatchB.xml
   mCastedBehaviour: {fileID: 1712250073169815496}
   mMeshFilter: {fileID: 0}
