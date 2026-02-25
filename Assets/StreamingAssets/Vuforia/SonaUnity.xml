@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
-    <ImageTarget name="f9" size="0.208000 0.242000" />
+    <ImageTarget name="basketball" size="0.100000 0.100000" />
   </Tracking>
 </QCARConfig>
