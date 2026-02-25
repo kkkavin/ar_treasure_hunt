@@ -483,9 +483,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93a45a41605cd04cb06f05807aabca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwForce: 2
-  upwardForce: 5
-  maxSwipeTime: 0.5
+  throwForce: 8
+  upwardForce: 15
+  maxSwipeTime: 0.8
   resetYThreshold: -1
 --- !u!4 &1683496315 stripped
 Transform:
@@ -782,7 +782,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7309293793705200217, guid: 9e9e148eed62bb7459e47674db939d21, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -31.51
+      value: -16.98
       objectReference: {fileID: 0}
     - target: {fileID: 7309293793705200217, guid: 9e9e148eed62bb7459e47674db939d21, type: 3}
       propertyPath: m_LocalRotation.w
