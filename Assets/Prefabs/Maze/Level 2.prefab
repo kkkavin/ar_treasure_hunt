@@ -2140,7 +2140,7 @@ MonoBehaviour:
   ShowGameOver: 0
   enterBoss: 0
   gameCompleted: 0
-  speed: 0.15
+  speed: 0.2
   rb: {fileID: 3393489821087134510}
 --- !u!1 &1448990424446371813
 GameObject:
