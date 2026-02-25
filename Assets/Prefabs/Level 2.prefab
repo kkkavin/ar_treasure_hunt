@@ -717,7 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &6626808514664617425
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2038,7 +2038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7114210629293976461}
-  speed: 0.05
+  speed: 0.1
   caught: 1
 --- !u!1 &1439453882967613979
 GameObject:
@@ -2140,7 +2140,7 @@ MonoBehaviour:
   ShowGameOver: 0
   enterBoss: 0
   gameCompleted: 0
-  speed: 0.1
+  speed: 0.15
   rb: {fileID: 3393489821087134510}
 --- !u!1 &1448990424446371813
 GameObject:
@@ -3856,7 +3856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &3587979077923977512
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6625,7 +6625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &196493713614793260
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8224,7 +8224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0853dc5ea1bbbc4e9b3e75dc92461cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!54 &3435315457281897344
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9764,7 +9764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7114210629293976461}
-  speed: 0.05
+  speed: 0.1
   caught: 1
 --- !u!1 &8111222308571421799
 GameObject:
