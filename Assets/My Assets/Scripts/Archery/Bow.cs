@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bow : MonoBehaviour
 {
+    public Transform camera
     // Start is called before the first frame update
     void Start()
     {
