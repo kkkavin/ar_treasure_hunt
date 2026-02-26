@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(arrow,)
+        Instantiate(arrow, bow);
     }
 
     // Update is called once per frame
