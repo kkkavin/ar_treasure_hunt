@@ -1024,8 +1024,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   throwForce: 8
-  upwardForce: 15
-  maxSwipeTime: 0.8
+  upwardForce: 2
+  maxSwipeTime: 0.5
   resetYThreshold: -1
 --- !u!4 &1683496315 stripped
 Transform:
@@ -1246,7 +1246,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.05
+  near clip plane: 0.3
   far clip plane: 2000
   field of view: 60
   orthographic: 0
@@ -1301,6 +1301,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1937934938}
     m_Modifications:
+    - target: {fileID: 5348526950749670535, guid: 9e9e148eed62bb7459e47674db939d21, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348526950749670535, guid: 9e9e148eed62bb7459e47674db939d21, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7309293793705200217, guid: 9e9e148eed62bb7459e47674db939d21, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.9218532
