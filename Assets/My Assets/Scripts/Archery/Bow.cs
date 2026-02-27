@@ -14,6 +14,8 @@ public class Bow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Camera.main.transform.position + (0, -0.05, 0.2);
+        //transform.position = Camera.main.transform.position + new Vector3(0, -0.05f, 0.2f);
+        //transform.eulerAngles = new Vector3(-30, Camera.main.transform.eulerAngles.y, 90);
+        //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Camera.main.transform.eulerAngles.y, transform.eulerAngles.z);
     }
 }
