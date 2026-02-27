@@ -11,13 +11,6 @@ public class SpawnArrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(arrow, bow.transform.position + new Vector3(0, 0, 0), bow.transform.rotation);
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        arrow.transform.position = bow.transform.position + new Vector3(0, 0, 0);
-        arrow.transform.eulerAngles = bow.transform.eulerAngles;
+        //Instantiate(arrow, bow.transform.position + new Vector3(0, 0, 0), bow.transform.rotation, Camera.main.transform);
     }
 }
