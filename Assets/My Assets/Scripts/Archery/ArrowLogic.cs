@@ -26,7 +26,8 @@ public class ArrowLogic : MonoBehaviour
     private Quaternion startRotation;
 
     [Header("Audio")]
-    public AudioSource releaseSound; // Drag your Audio Source here in the Inspector
+    public AudioSource arrowAudioSource; // The single "speaker" attached to the arrow
+    public AudioClip hitSoundClip;       // The actual "thud" audio file
 
     void Start()
     {
@@ -112,9 +113,9 @@ public class ArrowLogic : MonoBehaviour
         rb.AddForce(transform.forward * appliedForce);
 
         // Play the twang sound effect!
-        if (releaseSound != null)
+        if (arrowAudioSource != null)
         {
-            releaseSound.Play();
+            arrowAudioSource.Play();
         }
         
         Debug.Log($"Arrow released with force: {appliedForce}");
@@ -143,21 +144,24 @@ public class ArrowLogic : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the object we hit has the "Target" tag
         if (collision.gameObject.CompareTag("Target"))
         {
-            // 1. Stop all physical movement instantly
+            // 1. Tell the single speaker to play the thud clip once!
+            if (arrowAudioSource != null && hitSoundClip != null)
+            {
+                arrowAudioSource.PlayOneShot(hitSoundClip);
+            }
+
+            // 2. Stop all physical movement
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
 
-            // 2. Parent the arrow to the target so it tracks with the AR image
+            // 3. Parent the arrow to the target
             transform.SetParent(collision.transform);
-
-            // 3. Disable this script so the player cannot drag the stuck arrow again
             this.enabled = false;
 
-            // 4. Find the Spawner and tell it to create a new arrow
+            // 4. Spawn a new arrow
             FindObjectOfType<ArrowSpawner>().SpawnArrow();
         }
     }

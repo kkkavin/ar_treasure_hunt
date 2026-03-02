@@ -3,8 +3,8 @@ using UnityEngine;
 public class ArrowSpawner : MonoBehaviour
 {
     public GameObject arrowPrefab; 
-    public Transform stringAnchor;
-    public BowStringVisual bowStringVisual;
+    public Transform stringAnchor; 
+    public BowStringVisual bowStringVisual; // The script that draws the string
 
     void Start()
     {
@@ -13,19 +13,27 @@ public class ArrowSpawner : MonoBehaviour
 
     public void SpawnArrow()
     {
-        // 1. Spawn the arrow as a child of the anchor
+        // 1. Spawn the new arrow
         GameObject newArrow = Instantiate(arrowPrefab, stringAnchor);
         newArrow.transform.localPosition = Vector3.zero;
         newArrow.transform.localRotation = Quaternion.identity;
 
-        // 2. Grab the ArrowLogic script attached to the new arrow
+        // 2. Grab the ArrowLogic script from the new arrow
         ArrowLogic arrowScript = newArrow.GetComponent<ArrowLogic>();
 
-        // 3. Hand the scene reference directly to the prefab instance!
         if (arrowScript != null)
         {
+            // Give the arrow its anchor point
             arrowScript.bowString = stringAnchor;
-            arrowScript.bowStringScript = bowStringVisual;
+            
+            // Give the arrow the string script so it knows what to stretch when pulled
+            arrowScript.bowStringScript = bowStringVisual; 
+        }
+
+        // 3. Tell the BowStringVisual that THIS new arrow is the one it should attach to
+        if (bowStringVisual != null)
+        {
+            bowStringVisual.arrowNock = newArrow.transform;
         }
     }
 }
