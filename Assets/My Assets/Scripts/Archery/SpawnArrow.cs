@@ -1,16 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class SpawnArrow : MonoBehaviour
+public class ArrowSpawner : MonoBehaviour
 {
-    public GameObject arrow;
-    public GameObject bow;
-    //public Transform obj;
-    // Start is called before the first frame update
+    public GameObject arrowPrefab; 
+    public Transform stringAnchor;
+    public BowStringVisual bowStringVisual;
+
     void Start()
     {
-        //Instantiate(arrow, bow.transform.position + new Vector3(0, 0, 0), bow.transform.rotation, Camera.main.transform);
+        SpawnArrow();
+    }
+
+    public void SpawnArrow()
+    {
+        // 1. Spawn the arrow as a child of the anchor
+        GameObject newArrow = Instantiate(arrowPrefab, stringAnchor);
+        newArrow.transform.localPosition = Vector3.zero;
+        newArrow.transform.localRotation = Quaternion.identity;
+
+        // 2. Grab the ArrowLogic script attached to the new arrow
+        ArrowLogic arrowScript = newArrow.GetComponent<ArrowLogic>();
+
+        // 3. Hand the scene reference directly to the prefab instance!
+        if (arrowScript != null)
+        {
+            arrowScript.bowString = stringAnchor;
+            arrowScript.bowStringScript = bowStringVisual;
+        }
     }
 }
