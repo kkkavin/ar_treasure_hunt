@@ -107,7 +107,8 @@ MonoBehaviour:
   bowString: {fileID: 0}
   rb: {fileID: 0}
   fallThreshold: -5
-  releaseSound: {fileID: 2897257504858192691}
+  arrowAudioSource: {fileID: 2897257504858192691}
+  hitSoundClip: {fileID: 8300000, guid: e49ee1a0c1413304cae450342e8d7822, type: 3}
 --- !u!54 &4173524186029882717
 Rigidbody:
   m_ObjectHideFlags: 0
