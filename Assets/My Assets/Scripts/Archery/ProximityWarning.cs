@@ -14,16 +14,18 @@ public class ProximityWarning : MonoBehaviour
 
     void Update()
     {
-        // 1. AR SAFETY: If we haven't found the target yet, search for it using the tag
-        if (archeryTarget == null)
+        // Always try to find the active target if we don't have one
+        if (archeryTarget == null || !archeryTarget.gameObject.activeInHierarchy)
         {
-            GameObject foundTarget = GameObject.FindGameObjectWithTag("Target");
-            if (foundTarget != null)
+             // FindGameObjectsWithTag returns active objects. We grab the first one.
+            GameObject[] foundTargets = GameObject.FindGameObjectsWithTag("Target");
+            
+            if (foundTargets.Length > 0)
             {
-                archeryTarget = foundTarget.transform;
-                targetCollider = foundTarget.GetComponent<MeshCollider>();
+                archeryTarget = foundTargets[0].transform;
+                targetCollider = foundTargets[0].GetComponent<MeshCollider>();
             }
-            return; // Stop running this frame until a target actually exists
+            return; 
         }
 
         // 2. Measure the physical distance between the phone (this script) and the target

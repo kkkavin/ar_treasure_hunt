@@ -24,6 +24,7 @@ public class ArrowLogic : MonoBehaviour
 
     private Vector3 startPosition;
     private Quaternion startRotation;
+    private bool hasHit = false;
 
     [Header("Audio")]
     public AudioSource arrowAudioSource; // The single "speaker" attached to the arrow
@@ -176,10 +177,25 @@ public class ArrowLogic : MonoBehaviour
         if (other.gameObject.CompareTag("Target"))
         {
              // 2. Turn off the smoothing BEFORE the real crash!
-             if (rb != null)
-             {
-                 rb.interpolation = RigidbodyInterpolation.None;
-             }
+            if (rb != null)
+            {
+                rb.interpolation = RigidbodyInterpolation.None;
+            }
+
+            if (!hasHit)
+            {
+                hasHit = true; // Lock it so it can't hit again
+                
+                // Tell the GameManager to count the hit
+                FindObjectOfType<GameManager>().RegisterHit();
+                
+                // Stick to the target
+                transform.SetParent(other.transform);
+                
+                // Disable the arrow's physics so it stops moving/colliding
+                GetComponent<Rigidbody>().isKinematic = true;
+                GetComponent<Collider>().enabled = false; 
+            }
         }
     }
 }
