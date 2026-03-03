@@ -29,12 +29,15 @@ public class ball : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         
-        // Save the AR Camera (or whatever the initial parent is) and the local transforms
+        // --- NEW: Force the physics to completely sleep until thrown ---
+        rb.isKinematic = true; 
+        rb.useGravity = false; // Extra safety measure!
+
+        // Save the AR Camera and the local transforms
         initialParent = transform.parent;
         initialLocalPosition = transform.localPosition;
         initialLocalRotation = transform.localRotation;
     }
-
     void Update()
     {
         // Condition 1: Check if the ball has fallen below the Y threshold
@@ -68,32 +71,29 @@ public class ball : MonoBehaviour
         if (Input.GetMouseButtonUp(0)) { endTouchPos = Input.mousePosition; ThrowBall(); }
     }
 
-    void ThrowBall()
+   void ThrowBall()
     {
         float swipeTime = Time.time - swipeStartTime;
         if (swipeTime > maxSwipeTime) return;
 
         // --- NEW: Unparent the ball from the AR Camera ---
         transform.SetParent(environmentParent); 
-        // If environmentParent is unassigned (null), it just becomes a top-level world object, which is perfect for AR.
 
         Vector2 swipeDir = endTouchPos - startTouchPos;
-        // Adjusted Z calculation for 3D space
         Vector3 force = new Vector3(swipeDir.x, swipeDir.y, swipeDir.y * 1.5f) * throwForce / 100f;
         
-        // Make sure the force is applied relative to the camera's current rotation
-        // so it always shoots "forward" from where you are looking
         Vector3 worldForce = initialParent.TransformDirection(force);
-        worldForce.y += upwardForce; // Keep the upward arc absolute
+        worldForce.y += upwardForce; 
 
         rb.isKinematic = false;
+        rb.useGravity = true; // <--- ADD THIS LINE HERE
         rb.AddForce(worldForce, ForceMode.Impulse);
         hasThrown = true;
     }
-
-    public void ResetBall()
+   public void ResetBall()
     {
         rb.isKinematic = true;
+        rb.useGravity = false; // <--- ADD THIS LINE HERE
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
