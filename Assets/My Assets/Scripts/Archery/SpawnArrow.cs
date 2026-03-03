@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class ArrowSpawner : MonoBehaviour
 {
-    public GameObject arrowPrefab; 
-    public Transform stringAnchor; 
+    public GameObject arrowPrefab;
+    public Transform stringAnchor;
     public BowStringVisual bowStringVisual; // The script that draws the string
 
+    void Awake()
+    {
+        // Force the Android device to run the game at 60 Frames Per Second
+        Application.targetFrameRate = 60;
+    }
     void Start()
     {
         SpawnArrow();
@@ -25,9 +30,9 @@ public class ArrowSpawner : MonoBehaviour
         {
             // Give the arrow its anchor point
             arrowScript.bowString = stringAnchor;
-            
+
             // Give the arrow the string script so it knows what to stretch when pulled
-            arrowScript.bowStringScript = bowStringVisual; 
+            arrowScript.bowStringScript = bowStringVisual;
         }
 
         // 3. Tell the BowStringVisual that THIS new arrow is the one it should attach to
