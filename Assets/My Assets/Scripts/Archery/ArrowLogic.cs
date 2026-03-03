@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 
 public class ArrowLogic : MonoBehaviour
 {
@@ -9,19 +9,19 @@ public class ArrowLogic : MonoBehaviour
     public float maxShootForce = 3500f;      // Force if you pull it all the way back
     public float maxPullDistance = 1.5f;     // How far back the arrow can physically move
     public float pullSensitivity = 0.005f;   // Converts screen pixels to world 3D distance
-    
+
     [Header("References")]
-    public Transform bowString; 
+    public Transform bowString;
     public Rigidbody rb;
-    
+
     [Header("Reset Settings")]
     public float fallThreshold = -5f;
-    
+
     private bool isReleased = false;
     private bool isBeingPulled = false;
     private Vector2 startTouchPos;
     private float currentPullAmount = 0f;
-    
+
     private Vector3 startPosition;
     private Quaternion startRotation;
 
@@ -32,8 +32,11 @@ public class ArrowLogic : MonoBehaviour
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true; 
-        
+
+        rb.isKinematic = true;
+        // FIX 1: Turn off interpolation while docked in the bow
+        rb.interpolation = RigidbodyInterpolation.None;
+
         startPosition = transform.position;
         startRotation = transform.rotation;
     }
@@ -55,7 +58,7 @@ public class ArrowLogic : MonoBehaviour
         {
             isBeingPulled = true;
             // Record exactly where the finger first touched the screen
-            startTouchPos = Pointer.current.position.ReadValue(); 
+            startTouchPos = Pointer.current.position.ReadValue();
             OnPullStart(bowString);
         }
 
@@ -63,13 +66,13 @@ public class ArrowLogic : MonoBehaviour
         if (isBeingPulled && Pointer.current.press.isPressed)
         {
             Vector2 currentTouchPos = Pointer.current.position.ReadValue();
-            
+
             // Calculate how far the finger moved DOWN the screen
             float dragDistance = (startTouchPos.y - currentTouchPos.y) * pullSensitivity;
-            
+
             // Limit the pullback distance
             currentPullAmount = Mathf.Clamp(dragDistance, 0f, maxPullDistance);
-            
+
             // Visually move the arrow backward
             transform.localPosition = new Vector3(0, 0, -currentPullAmount);
         }
@@ -85,42 +88,42 @@ public class ArrowLogic : MonoBehaviour
     public void OnPullStart(Transform stringTarget)
     {
         if (stringTarget == null) return;
-        
+
         isReleased = false;
         rb.isKinematic = true;
-        transform.SetParent(stringTarget); 
-        transform.localPosition = Vector3.zero; 
+        // FIX 2: Keep it off while we manually move the arrow backward
+        rb.interpolation = RigidbodyInterpolation.None;
+
+        transform.SetParent(stringTarget);
+        transform.localPosition = Vector3.zero;
         currentPullAmount = 0f;
 
-        // Tell the string to follow THIS arrow
         if (bowStringScript != null)
         {
             bowStringScript.arrowNock = this.transform;
         }
     }
-
     public void OnRelease()
     {
         if (isReleased) return;
         isReleased = true;
-        transform.SetParent(null); 
-        rb.isKinematic = false; 
-        
-        // Calculate the dynamic force using the ratio of how far it was pulled
-        float pullRatio = currentPullAmount / maxPullDistance; 
+
+        transform.SetParent(null);
+        rb.isKinematic = false;
+
+        // Change this line inside your OnRelease() function
+        rb.interpolation = RigidbodyInterpolation.Extrapolate;
+
+        float pullRatio = currentPullAmount / maxPullDistance;
         float appliedForce = Mathf.Lerp(minShootForce, maxShootForce, pullRatio);
-        
+
         rb.AddForce(transform.forward * appliedForce);
 
-        // Play the twang sound effect!
         if (arrowAudioSource != null)
         {
-            arrowAudioSource.Play();
+            arrowAudioSource.PlayOneShot(arrowAudioSource.clip);
         }
-        
-        Debug.Log($"Arrow released with force: {appliedForce}");
 
-        // Tell the string to snap back to the center
         if (bowStringScript != null)
         {
             bowStringScript.arrowNock = null;
@@ -132,8 +135,9 @@ public class ArrowLogic : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        rb.interpolation = RigidbodyInterpolation.None;
 
-        transform.SetParent(bowString); 
+        transform.SetParent(bowString);
         transform.position = bowString.position;
         transform.rotation = bowString.rotation;
 
@@ -163,6 +167,19 @@ public class ArrowLogic : MonoBehaviour
 
             // 4. Spawn a new arrow
             FindObjectOfType<ArrowSpawner>().SpawnArrow();
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // 1. If we hit the bubble...
+        if (other.gameObject.CompareTag("Target"))
+        {
+             // 2. Turn off the smoothing BEFORE the real crash!
+             if (rb != null)
+             {
+                 rb.interpolation = RigidbodyInterpolation.None;
+             }
         }
     }
 }
