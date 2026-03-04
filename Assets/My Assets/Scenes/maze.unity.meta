@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/My Assets/Scenes/maze.unity.meta
 guid: 4755b35b590504809a7525fd2109c2e2
+========
+guid: 0851605490a599b46b6ac5cb681d93ea
+>>>>>>>> feature/archery:Assets/TextMesh Pro/Examples & Extras/Scenes/26 - Dropdown Placeholder Example.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

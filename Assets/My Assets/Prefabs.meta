@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/My Assets/Prefabs.meta
 guid: 03e083fb13d73d540945dc37b6d4db43
+========
+guid: 808f63b5eac730c49adf987f042ddd2e
+>>>>>>>> feature/archery:Assets/My Assets/Store/Kendall H/Easy Weapons/Prefabs.meta
+=======
+guid: d00bf4315ef73fb45aa04ea15bec9261
+>>>>>>> feature/archery
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
