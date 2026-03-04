@@ -7,31 +7,32 @@ public class GameManager : MonoBehaviour
     public GameObject level2Container;
 
     [Header("Game Rules")]
-    public int hitsToAdvance = 3;
+    public int hitsToAdvanceLevel1 = 3;
+    public int hitsToAdvanceLevel2 = 3;
     private int currentHits = 0;
     private int currentLevel = 1;
 
     [Header("Physics Settings")]
-    public float hitCooldown = 0.5f; // Minimum time between counted hits
-    private float lastHitTime = -1f;
+    public float hitCooldown = 0.1f;  // reduced cooldown
+    private float lastHitTime = -Mathf.Infinity;  // init to far past so first hit always counts
 
     [Header("UI Elements")]
     public GameObject finishedLevel1;
     public GameObject finishedLevel2;
 
     [Header("Bow Setup")]
-    public GameObject level1BowObject; // The child object with the Lvl 1 SkinnedMesh
-    public GameObject level2BowObject; // The child object with the Lvl 2 SkinnedMesh
+    public GameObject level1BowObject;
+    public GameObject level2BowObject;
 
     // pause‑management fields
     bool isPaused;
     float baseFixedDeltaTime;
 
-    public bool IsPaused => isPaused;          // read‑only property for other scripts
+    public bool IsPaused => isPaused;
 
     void Awake()
     {
-        baseFixedDeltaTime = Time.fixedDeltaTime; // cache default fixed timestep
+        baseFixedDeltaTime = Time.fixedDeltaTime;
     }
 
     void Start()
@@ -41,18 +42,24 @@ public class GameManager : MonoBehaviour
 
     public void RegisterHit()
     {
-        if (isPaused) return;                  // ignore input when paused
+        if (isPaused) return;
 
-        if (Time.time < lastHitTime + hitCooldown) return;
+        // only reject if cooldown hasn't elapsed since the *last hit*
+        if (Time.time < lastHitTime + hitCooldown)
+        {
+            Debug.Log("Hit rejected – cooldown active");
+            return;
+        }
 
         currentHits++;
         lastHitTime = Time.time;
 
         Debug.Log($"Hit Registered! Total: {currentHits}");
 
-        if (currentHits >= hitsToAdvance)
+        int hitsRequired = (currentLevel == 1) ? hitsToAdvanceLevel1 : hitsToAdvanceLevel2;
+
+        if (currentHits >= hitsRequired)
         {
-            // Delay pause so the hit sound finishes playing (~0.5 sec)
             Invoke(nameof(AdvanceLevel), 0.5f);
         }
     }
@@ -60,12 +67,13 @@ public class GameManager : MonoBehaviour
     void AdvanceLevel()
     {
         currentHits = 0;
+        lastHitTime = -Mathf.Infinity;  // reset cooldown for new level
 
         if (currentLevel == 1)
         {
             Debug.Log("Advancing to Level 2!");
             finishedLevel1.SetActive(true);
-            PauseGame();                       // pause when showing panel
+            PauseGame();
         }
         else if (currentLevel == 2)
         {
@@ -78,13 +86,16 @@ public class GameManager : MonoBehaviour
     void LoadLevel(int level)
     {
         currentLevel = level;
+        currentHits = 0;
+        lastHitTime = -Mathf.Infinity;  // reset cooldown when loading level
+
         level1Container.SetActive(level == 1);
         level1BowObject.SetActive(level == 1);
 
         level2Container.SetActive(level == 2);
         level2BowObject.SetActive(level == 2);
 
-        ClearOldArrows();
+        ClearOldArrows();        // now destroys all arrows unconditionally
     }
 
     void ClearOldArrows()
@@ -92,14 +103,10 @@ public class GameManager : MonoBehaviour
         GameObject[] arrows = GameObject.FindGameObjectsWithTag("Arrow");
         foreach (GameObject arrow in arrows)
         {
-            if (arrow.transform.parent != null)
-            {
-                Destroy(arrow);
-            }
+            Destroy(arrow);
         }
     }
 
-    // pause helpers
     void SetPaused(bool paused)
     {
         if (isPaused == paused) return;
@@ -113,7 +120,6 @@ public class GameManager : MonoBehaviour
     public void PauseGame() => SetPaused(true);
     public void ResumeGame() => SetPaused(false);
 
-    // callbacks for the level‑complete UI buttons
     public void ResumeFromFinishedLevel1()
     {
         finishedLevel1.SetActive(false);
@@ -124,7 +130,33 @@ public class GameManager : MonoBehaviour
     public void ResumeFromFinishedLevel2()
     {
         finishedLevel2.SetActive(false);
-        LoadLevel(1);               // restart or whatever you want
+        LoadLevel(1);
         ResumeGame();
     }
+
+    // these two methods are for the ImageTargetBehaviour events
+    public void OnImageTargetFound()
+    {
+        // only enable the bow that belongs to the active level
+        if (currentLevel == 1)
+        {
+            level1BowObject.SetActive(true);
+            level2BowObject.SetActive(false);
+        }
+        else // level 2
+        {
+            level1BowObject.SetActive(false);
+            level2BowObject.SetActive(true);
+        }
+    }
+
+    public void OnImageTargetLost()
+    {
+        // hide both bows when the target disappears
+        level1BowObject.SetActive(false);
+        level2BowObject.SetActive(false);
+    }
+
+    // expose for other scripts
+    public int CurrentLevel => currentLevel;
 }

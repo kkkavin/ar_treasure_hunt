@@ -18,6 +18,10 @@ public class ArrowLogic : MonoBehaviour
     [Header("Reset Settings")]
     public float fallThreshold = -5f;
 
+    [Header("Hit Settings")]
+    [Tooltip("How far the arrow should sit inside the target. Tweak until only the tip is embedded.")]
+    public float embedDepth = 0.1f;
+
     private bool isReleased = false;
     private bool isBeingPulled = false;
     private Vector2 startTouchPos;
@@ -34,7 +38,7 @@ public class ArrowLogic : MonoBehaviour
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
-        gameManager = FindObjectOfType<GameManager>(); // cache
+        gameManager = FindObjectOfType<GameManager>();
 
         rb.isKinematic = true;
         rb.interpolation = RigidbodyInterpolation.None;
@@ -45,13 +49,11 @@ public class ArrowLogic : MonoBehaviour
 
     void Update()
     {
-        // Check if game is paused – block all input if so
         if (gameManager != null && gameManager.IsPaused)
         {
             return;
         }
 
-        // Check if it fell out of bounds
         if (transform.position.y < fallThreshold)
         {
             ResetArrow();
@@ -59,7 +61,6 @@ public class ArrowLogic : MonoBehaviour
 
         if (Pointer.current == null) return;
 
-        // 1. TOUCH DOWN
         if (Pointer.current.press.wasPressedThisFrame && !isReleased)
         {
             isBeingPulled = true;
@@ -67,7 +68,6 @@ public class ArrowLogic : MonoBehaviour
             OnPullStart(bowString);
         }
 
-        // 2. DRAGGING
         if (isBeingPulled && Pointer.current.press.isPressed)
         {
             Vector2 currentTouchPos = Pointer.current.position.ReadValue();
@@ -76,7 +76,6 @@ public class ArrowLogic : MonoBehaviour
             transform.localPosition = new Vector3(0, 0, -currentPullAmount);
         }
 
-        // 3. TOUCH UP
         if (Pointer.current.press.wasReleasedThisFrame && isBeingPulled)
         {
             isBeingPulled = false;
@@ -143,44 +142,17 @@ public class ArrowLogic : MonoBehaviour
         currentPullAmount = 0f;
     }
 
-    void ProcessHit(Collider targetCollider)
-    {
-        if (hasHit)
-            return;
-
-        // distance check – ignore hits while camera is too close
-        if (Camera.main != null)
-        {
-            float dist = Vector3.Distance(Camera.main.transform.position,
-                                          targetCollider.transform.position);
-            if (dist < ProximityWarning.SafeDistance)
-                return;        // bail out without parenting/spawning
-        }
-
-        hasHit = true;
-
-        if (arrowAudioSource != null && hitSoundClip != null)
-            arrowAudioSource.PlayOneShot(hitSoundClip);
-
-        gameManager?.RegisterHit();
-
-        transform.SetParent(targetCollider.transform);
-        rb.isKinematic = true;
-
-        // spawn next arrow only for real collisions
-        ArrowSpawner sp = FindObjectOfType<ArrowSpawner>();
-        if (sp != null)
-            sp.SpawnArrow();
-
-        GetComponent<Collider>().enabled = false;
-    }
-
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Target") &&
-            !collision.collider.isTrigger)          // ignore triggers here
+        if (!collision.collider || collision.collider.isTrigger) return;
+
+        if (collision.gameObject.CompareTag("Target"))
         {
-            ProcessHit(collision.collider);
+            ContactPoint contact = collision.GetContact(0);
+            Vector3 contactPoint = contact.point;
+            Vector3 contactNormal = contact.normal;
+
+            ProcessHit(collision.collider, contactPoint, contactNormal);
         }
     }
 
@@ -188,10 +160,90 @@ public class ArrowLogic : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Target"))
         {
-            // the spherical “proximity” trigger – only use it to disable
-            // interpolation, do *not* count it as a hit or parent the arrow
             if (rb != null)
                 rb.interpolation = RigidbodyInterpolation.None;
         }
+    }
+
+    void ProcessHit(Collider targetCollider, Vector3 contactPoint, Vector3 contactNormal)
+    {
+        if (hasHit) return;
+
+        if (gameManager != null && Camera.main != null)
+        {
+            float dist = Vector3.Distance(Camera.main.transform.position, targetCollider.transform.position);
+            if (dist < ProximityWarning.SafeDistance) return;
+        }
+
+        hasHit = true;
+
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.interpolation = RigidbodyInterpolation.None;
+            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        }
+
+        const float penetration = 0.02f;
+        Vector3 finalPosition = contactPoint + contactNormal * penetration;
+
+        // stable rotation: orient arrow into the surface instead of outwards
+        // normals point out of the surface, so we flip it to make the arrow tip face the
+        // impact direction. this prevents a 180° y‑axis flip when the solver chooses an
+        // arbitrary up vector later.
+        Quaternion finalRotation = GetStableRotation(-contactNormal);
+
+        // slide the arrow forward along its forward axis so only the tip is embedded.
+        // `embedDepth` is adjustable from the inspector; positive values move the arrow
+        // into the surface direction (which is `finalRotation.forward`).
+        finalPosition += (finalRotation * Vector3.forward) * embedDepth;
+
+        // always detach first and set world pose
+        transform.SetParent(null, false);
+        transform.position = finalPosition;
+        transform.rotation = finalRotation;
+
+        // in level 2, parent with world pose preserved so arrow follows animation
+        if (gameManager != null && gameManager.CurrentLevel == 2)
+        {
+            transform.SetParent(targetCollider.transform, true);  // worldPositionStays = true
+        }
+
+        if (arrowAudioSource != null && hitSoundClip != null)
+            arrowAudioSource.PlayOneShot(hitSoundClip);
+
+        FindObjectOfType<ArrowSpawner>()?.SpawnArrow();
+        gameManager?.RegisterHit();
+
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+    }
+
+    /// <summary>
+    /// Calculate a stable rotation that points the arrow forward along the contact normal,
+    /// avoiding gimbal lock and flipping at edge cases.
+    /// </summary>
+    Quaternion GetStableRotation(Vector3 normal)
+    {
+        normal = normal.normalized;
+
+        // define a stable "right" vector perpendicular to the normal
+        Vector3 right = Vector3.Cross(normal, Vector3.up);
+
+        // if normal is too close to up/down, use a different reference
+        if (right.sqrMagnitude < 0.01f)
+        {
+            right = Vector3.Cross(normal, Vector3.right);
+        }
+
+        right = right.normalized;
+
+        // compute a stable "up" perpendicular to both
+        Vector3 up = Vector3.Cross(right, normal).normalized;
+
+        // build rotation matrix: forward = normal, right = right, up = up
+        return Quaternion.LookRotation(normal, up);
     }
 }

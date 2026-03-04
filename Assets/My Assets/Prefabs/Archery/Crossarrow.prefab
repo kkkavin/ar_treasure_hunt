@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 99156e326ebec594f9587c2dc8d8712a, type: 2}
+  - {fileID: 2100000, guid: d57ad6836599ae54982f7f2e8aa23715, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,12 +101,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bowStringScript: {fileID: 0}
   minShootForce: 50
-  maxShootForce: 400
-  maxPullDistance: 0.45
+  maxShootForce: 500
+  maxPullDistance: 0.5
   pullSensitivity: 0.005
   bowString: {fileID: 0}
   rb: {fileID: 0}
   fallThreshold: -5
+  embedDepth: -0.07
   hasHit: 0
   arrowAudioSource: {fileID: 5257623045584687803}
   hitSoundClip: {fileID: 8300000, guid: e49ee1a0c1413304cae450342e8d7822, type: 3}

@@ -3,70 +3,95 @@ using UnityEngine;
 public class ProximityWarning : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject warningPanel; // Drag your UI Panel here
+    public GameObject warningPanel;
     public GameObject aim;
 
     [Header("Settings")]
-    public float minimumSafeDistance = 1.5f; // Distance in meters (Unity units)
+    public float minimumSafeDistance = 1.5f;
 
     private Transform archeryTarget;
     private Collider arrowCollider;
+    private GameManager gameManager;
 
-    // make the value available to other scripts
+    // kept so that other scripts (ArrowLogic) can read the value
     public static float SafeDistance { get; private set; }
+
+    // state helpers
+    private bool wasJustTooClose = false;      // previous–frame proximity
+    private bool pausedByProximity = false;    // true while we have paused ourselves
 
     void Awake()
     {
         SafeDistance = minimumSafeDistance;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
     {
-        // keep the static value up to date in case you tweak it at runtime
-        SafeDistance = minimumSafeDistance;
+        SafeDistance = minimumSafeDistance; // allow runtime tweaking
 
-        // Always try to find the active target if we don't have one
+        // attempt to locate the current target/arrow if we lost them
         if (archeryTarget == null || !archeryTarget.gameObject.activeInHierarchy)
         {
-            GameObject[] foundTargets = GameObject.FindGameObjectsWithTag("Target");
-            if (foundTargets.Length > 0)
-            {
-                archeryTarget = foundTargets[0].transform;
-            }
-            return;
+            var found = GameObject.FindGameObjectsWithTag("Target");
+            if (found.Length > 0)
+                archeryTarget = found[0].transform;
         }
 
         if (arrowCollider == null || !arrowCollider.gameObject.activeInHierarchy)
         {
-            GameObject a = GameObject.FindGameObjectWithTag("Arrow");
+            var a = GameObject.FindGameObjectWithTag("Arrow");
             if (a != null)
                 arrowCollider = a.GetComponent<Collider>();
-            return;
         }
+
+        // if we still don't have a target there is nothing to do
+        if (archeryTarget == null) return;
 
         float currentDistance = Vector3.Distance(transform.position, archeryTarget.position);
         bool tooClose = currentDistance < minimumSafeDistance;
 
-        if (tooClose)
-        {
-            if (!warningPanel.activeSelf) warningPanel.SetActive(true);
-            if (aim.activeSelf) aim.SetActive(false);
-        }
-        else
-        {
-            if (warningPanel.activeSelf) warningPanel.SetActive(false);
-            if (!aim.activeSelf) aim.SetActive(true);
-        }
+        bool currentlyPaused = gameManager != null && gameManager.IsPaused;
 
-        // disable / enable every collider on the target, not just the mesh
-        if (archeryTarget != null)
+        // --- automatic pause/resume --------------------------------
+        if (tooClose && !wasJustTooClose)
         {
-            Collider[] cols = archeryTarget.GetComponents<Collider>();
-            foreach (var c in cols)
+            if (gameManager != null && !currentlyPaused)
             {
-                if (c != null) c.enabled = !tooClose;
+                gameManager.PauseGame();
+                pausedByProximity = true;
             }
         }
+        else if (!tooClose && wasJustTooClose)
+        {
+            if (gameManager != null && pausedByProximity)
+            {
+                // only resume if we're not showing a level‑complete panel
+                if (!gameManager.finishedLevel1.activeSelf &&
+                    !gameManager.finishedLevel2.activeSelf)
+                {
+                    gameManager.ResumeGame();
+                }
+                pausedByProximity = false;
+            }
+        }
+
+        wasJustTooClose = tooClose;
+
+        // --- warning panel / aim ------------------------------------
+        // show the warning if we're too close *and* either the game is
+        // not paused or the pause was caused by proximity itself
+        bool showWarning = tooClose && (!currentlyPaused || pausedByProximity);
+
+        if (warningPanel != null)
+            warningPanel.SetActive(showWarning);
+        if (aim != null)
+            aim.SetActive(!tooClose);
+
+        // --- collider enabling/disabling ----------------------------
+        Collider[] cols = archeryTarget.GetComponents<Collider>();
+        foreach (var c in cols)
+            if (c != null) c.enabled = !tooClose;
 
         if (arrowCollider != null)
             arrowCollider.enabled = !tooClose;
