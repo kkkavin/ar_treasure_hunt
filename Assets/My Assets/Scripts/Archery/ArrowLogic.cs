@@ -13,7 +13,7 @@ public class ArrowLogic : MonoBehaviour
     [Header("References")]
     public Transform bowString;
     public Rigidbody rb;
-    private GameManager gameManager;
+    private ArcheryGameManager gameManager;
 
     [Header("Reset Settings")]
     public float fallThreshold = -5f;
@@ -38,7 +38,7 @@ public class ArrowLogic : MonoBehaviour
     void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<ArcheryGameManager>();
 
         rb.isKinematic = true;
         rb.interpolation = RigidbodyInterpolation.None;

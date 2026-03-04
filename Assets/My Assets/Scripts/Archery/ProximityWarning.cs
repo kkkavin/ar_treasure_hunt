@@ -11,7 +11,7 @@ public class ProximityWarning : MonoBehaviour
 
     private Transform archeryTarget;
     private Collider arrowCollider;
-    private GameManager gameManager;
+    private ArcheryGameManager gameManager;
 
     // kept so that other scripts (ArrowLogic) can read the value
     public static float SafeDistance { get; private set; }
@@ -23,7 +23,7 @@ public class ProximityWarning : MonoBehaviour
     void Awake()
     {
         SafeDistance = minimumSafeDistance;
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<ArcheryGameManager>();
     }
 
     void Update()

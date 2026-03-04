@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class TargetCollisionTracker : MonoBehaviour
 {
-    private GameManager gameManager;
+    private ArcheryGameManager gameManager;
 
     void Start()
     {
-        // Find the GameManager in the scene
-        gameManager = FindObjectOfType<GameManager>();
+        // Find the ArcheryGameManager in the scene
+        gameManager = FindObjectOfType<ArcheryGameManager>();
     }
 
     void OnCollisionEnter(Collision collision)
