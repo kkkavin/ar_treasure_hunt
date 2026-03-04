@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: archery
+  m_Name: ghost_pink_anim
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -38,7 +38,6 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 4
-<<<<<<<< HEAD:Assets/My Assets/Animations/Maze/ghost_pink_anim.anim
         value: {x: -7.26, y: 0.6, z: -7.32}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
@@ -121,9 +120,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 13
         value: {x: -5.09, y: 0.6, z: -3.73}
-========
-        value: {x: 2, y: 0, z: 0}
->>>>>>>> feature/archery:Assets/My Assets/Animations/archery.anim
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -159,11 +155,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-<<<<<<<< HEAD:Assets/My Assets/Animations/Maze/ghost_pink_anim.anim
     m_StopTime: 13
-========
-    m_StopTime: 4
->>>>>>>> feature/archery:Assets/My Assets/Animations/archery.anim
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -407,7 +399,6 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 4
-<<<<<<<< HEAD:Assets/My Assets/Animations/Maze/ghost_pink_anim.anim
         value: -7.32
         inSlope: 0
         outSlope: 0
@@ -490,9 +481,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 13
         value: -3.73
-========
-        value: 0
->>>>>>>> feature/archery:Assets/My Assets/Animations/archery.anim
         inSlope: 0
         outSlope: 0
         tangentMode: 136
