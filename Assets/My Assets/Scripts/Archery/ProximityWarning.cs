@@ -10,45 +10,65 @@ public class ProximityWarning : MonoBehaviour
     public float minimumSafeDistance = 1.5f; // Distance in meters (Unity units)
 
     private Transform archeryTarget;
-    private Collider targetCollider;
+    private Collider arrowCollider;
+
+    // make the value available to other scripts
+    public static float SafeDistance { get; private set; }
+
+    void Awake()
+    {
+        SafeDistance = minimumSafeDistance;
+    }
 
     void Update()
     {
+        // keep the static value up to date in case you tweak it at runtime
+        SafeDistance = minimumSafeDistance;
+
         // Always try to find the active target if we don't have one
         if (archeryTarget == null || !archeryTarget.gameObject.activeInHierarchy)
         {
-             // FindGameObjectsWithTag returns active objects. We grab the first one.
             GameObject[] foundTargets = GameObject.FindGameObjectsWithTag("Target");
-            
             if (foundTargets.Length > 0)
             {
                 archeryTarget = foundTargets[0].transform;
-                targetCollider = foundTargets[0].GetComponent<MeshCollider>();
             }
-            return; 
+            return;
         }
 
-        // 2. Measure the physical distance between the phone (this script) and the target
-        float currentDistance = Vector3.Distance(transform.position, archeryTarget.position);
-
-        // 3. Logic: Are we too close?
-        if (currentDistance < minimumSafeDistance)
+        if (arrowCollider == null || !arrowCollider.gameObject.activeInHierarchy)
         {
-            // Show the warning text
+            GameObject a = GameObject.FindGameObjectWithTag("Arrow");
+            if (a != null)
+                arrowCollider = a.GetComponent<Collider>();
+            return;
+        }
+
+        float currentDistance = Vector3.Distance(transform.position, archeryTarget.position);
+        bool tooClose = currentDistance < minimumSafeDistance;
+
+        if (tooClose)
+        {
             if (!warningPanel.activeSelf) warningPanel.SetActive(true);
             if (aim.activeSelf) aim.SetActive(false);
-
-            // Turn off the target's hitbox so arrows can't stick to it
-            if (targetCollider != null) targetCollider.enabled = false;
         }
         else
         {
-            // Hide the warning text
             if (warningPanel.activeSelf) warningPanel.SetActive(false);
             if (!aim.activeSelf) aim.SetActive(true);
-
-            // Turn the hitbox back on so the game is playable
-            if (targetCollider != null) targetCollider.enabled = true;
         }
+
+        // disable / enable every collider on the target, not just the mesh
+        if (archeryTarget != null)
+        {
+            Collider[] cols = archeryTarget.GetComponents<Collider>();
+            foreach (var c in cols)
+            {
+                if (c != null) c.enabled = !tooClose;
+            }
+        }
+
+        if (arrowCollider != null)
+            arrowCollider.enabled = !tooClose;
     }
 }
