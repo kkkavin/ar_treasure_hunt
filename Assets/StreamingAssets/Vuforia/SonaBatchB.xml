@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
+    <ImageTarget name="basketball" size="0.100000 0.100000" />
     <ImageTarget name="archery" size="0.100000 0.100000" />
+    <ImageTarget name="maze" size="0.100000 0.100000" />
   </Tracking>
 </QCARConfig>

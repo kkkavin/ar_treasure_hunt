@@ -90,4 +90,11 @@ public class MazeGameManager : MonoBehaviour
             }
         }
     }
+
+    public void goHome()
+    {
+        GameObject.FindWithTag("Homepage").SetActive(true);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("home"));
+        SceneManager.UnloadSceneAsync("maze");
+    }
 }

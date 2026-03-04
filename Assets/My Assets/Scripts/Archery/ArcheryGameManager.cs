@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ArcheryGameManager : MonoBehaviour
 {
@@ -159,4 +160,11 @@ public class ArcheryGameManager : MonoBehaviour
 
     // expose for other scripts
     public int CurrentLevel => currentLevel;
+
+    public void goHome()
+    {
+        GameObject.FindGameObjectWithTag("Homepage").SetActive(true);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("home"));
+        SceneManager.UnloadSceneAsync("archery");
+    }
 }
