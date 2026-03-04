@@ -816,7 +816,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6256983562101436660}
-  - component: {fileID: 8869752315305640044}
   m_Layer: 0
   m_Name: Final
   m_TagString: Untagged
@@ -841,33 +840,6 @@ Transform:
   - {fileID: 3917424795463169166}
   m_Father: {fileID: 400043339299668244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8869752315305640044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5514818863625159737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1989711e87dcc4298ee9cf80d75997, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enchantAlwaysVisable: 0
-  isThrowable: 0
-  enchantmentFilters: []
-  isTesting: 0
-  bowDrawPercent: 0
-  drawNoDraw: {fileID: 7164873699491121166}
-  stringColor: {r: 0.745776, g: 0.22698571, b: 0.22698571, a: 0.69411767}
-  inputMaterial: {fileID: 2100000, guid: 814b6c260bd6f41458f6b4de4598ac2c, type: 2}
-  BowTopEnd: {fileID: 7048816327986709127}
-  BowDrawPoint: {fileID: 6538027341630079233}
-  BowBotEnd: {fileID: 1528954208524224688}
-  RigParent: {fileID: 7255828916504759365}
-  bowStringLinePre: {fileID: 2099399787926418797, guid: a69fbafc71c022e46a8d9369391ede96,
-    type: 3}
-  started: 1
 --- !u!1 &5616447831163124762
 GameObject:
   m_ObjectHideFlags: 0
