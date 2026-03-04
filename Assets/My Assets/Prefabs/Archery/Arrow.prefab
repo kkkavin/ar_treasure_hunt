@@ -101,12 +101,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bowStringScript: {fileID: 0}
   minShootForce: 50
-  maxShootForce: 400
+  maxShootForce: 500
   maxPullDistance: 0.45
   pullSensitivity: 0.005
   bowString: {fileID: 0}
   rb: {fileID: 0}
   fallThreshold: -5
+  embedDepth: -0.07
   hasHit: 0
   arrowAudioSource: {fileID: 2897257504858192691}
   hitSoundClip: {fileID: 8300000, guid: e49ee1a0c1413304cae450342e8d7822, type: 3}
