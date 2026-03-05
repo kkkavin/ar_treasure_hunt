@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vuforia;
 
 public class ArcheryGameManager : MonoBehaviour
 {
@@ -158,8 +159,6 @@ public class ArcheryGameManager : MonoBehaviour
     {
         Time.timeScale = 1f; // unpause before going home
         finishedLevel2.SetActive(false);
-        HomeGameManager.Instance.ToggleHomepage(true);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
-        SceneManager.UnloadSceneAsync("archery");
+        SceneManager.LoadScene("Home", LoadSceneMode.Single);
     }
 }

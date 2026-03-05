@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl; // Required to restart the game
+using UnityEngine.SocialPlatforms.Impl; 
+using Vuforia;
 
 public class MazeGameManager : MonoBehaviour
 {
@@ -94,8 +95,6 @@ public class MazeGameManager : MonoBehaviour
     {
         Time.timeScale = 1f; // unpause before going home
         winPanel.SetActive(false);
-        HomeGameManager.Instance.ToggleHomepage(true);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
-        SceneManager.UnloadSceneAsync("maze");
+        SceneManager.LoadScene("Home", LoadSceneMode.Single);
     }
 }

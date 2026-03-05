@@ -47,6 +47,14 @@ public class ArrowLogic : MonoBehaviour
         startRotation = transform.rotation;
     }
 
+    void FixedUpdate()
+    {
+        if (isReleased && !hasHit && rb != null && rb.velocity.sqrMagnitude > 0.1f)
+        {
+            transform.rotation = Quaternion.LookRotation(rb.velocity);
+        }
+    }
+
     void Update()
     {
         if (gameManager != null && gameManager.IsPaused)
@@ -76,7 +84,7 @@ public class ArrowLogic : MonoBehaviour
             transform.localPosition = new Vector3(0, 0, -currentPullAmount);
         }
 
-        if (Pointer.current.press.wasReleasedThisFrame && isBeingPulled)
+        if ((Pointer.current.press.wasReleasedThisFrame || !Pointer.current.press.isPressed) && isBeingPulled)
         {
             isBeingPulled = false;
             OnRelease();
@@ -104,11 +112,19 @@ public class ArrowLogic : MonoBehaviour
     public void OnRelease()
     {
         if (isReleased) return;
+
+        // Cancel shot if barely pulled
+        if (currentPullAmount < 0.1f)
+        {
+            ResetArrow();
+            return;
+        }
+
         isReleased = true;
 
         transform.SetParent(null);
         rb.isKinematic = false;
-        rb.interpolation = RigidbodyInterpolation.Extrapolate;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         float pullRatio = currentPullAmount / maxPullDistance;
         float appliedForce = Mathf.Lerp(minShootForce, maxShootForce, pullRatio);
