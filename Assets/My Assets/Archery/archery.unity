@@ -486,7 +486,7 @@ MonoBehaviour:
   level2Container: {fileID: 976482990}
   hitsToAdvanceLevel1: 3
   hitsToAdvanceLevel2: 3
-  hitCooldown: 0.5
+  hitCooldown: 0.1
   finishedLevel1: {fileID: 405187908}
   finishedLevel2: {fileID: 959839765}
   level1BowObject: {fileID: 862695797}
