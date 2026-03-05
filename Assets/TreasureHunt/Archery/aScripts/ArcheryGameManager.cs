@@ -157,7 +157,7 @@ public class ArcheryGameManager : MonoBehaviour
     public void goHome()
     {
         Time.timeScale = 1f; // unpause before going home
-        finishedLevel2.SetActive
+        finishedLevel2.SetActive(false);
         HomeGameManager.Instance.ToggleHomepage(true);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
         SceneManager.UnloadSceneAsync("archery");
