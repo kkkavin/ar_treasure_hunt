@@ -89,4 +89,12 @@ public class MazeGameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
     }
+
+    public void goHome()
+    {
+        Time.timeScale = 1f; // unpause before going home
+        HomeGameManager.Instance.ToggleHomepage(true);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
+        SceneManager.UnloadSceneAsync("archery");
+    }
 }
