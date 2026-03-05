@@ -93,6 +93,7 @@ public class MazeGameManager : MonoBehaviour
     public void goHome()
     {
         Time.timeScale = 1f; // unpause before going home
+        winPanel.SetActive(false);
         HomeGameManager.Instance.ToggleHomepage(true);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
         SceneManager.UnloadSceneAsync("maze");
