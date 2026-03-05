@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     public bool ShowGameOver = false, enterBoss = false, gameCompleted = false;
     public float speed = 10f;
     public Rigidbody rb;
+    private GameManager gm;
+
+    void Start()
+    {
+        gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+    }
+    
     void Update()
     {
         // This reads both a physical gamepad AND your On-Screen Stick
@@ -25,6 +32,14 @@ public class PlayerController : MonoBehaviour
             collision.gameObject.SetActive(false);
             score += 1;
         }
+        if (score == 4 && isBoss == false)
+        {
+            gm.enterBoss();
+        }
+        if (score == 4 && isBoss)
+        {
+            gm.finishGame();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -33,14 +48,6 @@ public class PlayerController : MonoBehaviour
         {
             ShowGameOver = true;
             Debug.Log("Collision");
-        }
-        if (score == 4 && isBoss == false)
-        {
-            enterBoss = true;
-        }
-        if (score == 4 && isBoss)
-        {
-            gameCompleted = true;
         }
     }
 }

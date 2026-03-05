@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         bossPanel.SetActive(false);
+        currentLevel = 2;
+        RestartCurrentLevel();
     }
 
     void Update()
@@ -68,26 +70,23 @@ public class GameManager : MonoBehaviour
                 }
                 pc.ShowGameOver = false;
             }
-            if (pc.enterBoss)
-            {
-                if (bossPanel != null)
-                {
-                    bossPanel.SetActive(true);
-                    currentLevel = 2;
-                    RestartCurrentLevel();
-                    Time.timeScale = 0f;
-                }
-                pc.enterBoss = false;
-            }
-            if (pc.gameCompleted)
-            {
-                if (winPanel != null)
-                {
-                    winPanel.SetActive(true);
-                    Time.timeScale = 0f;
-                }
-                pc.gameCompleted = false;
-            }
+        }
+    }
+
+    public void enterBoss()
+    {
+        if (bossPanel != null)
+        {
+            bossPanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+    }
+    public void finishGame()
+    {
+        if (winPanel != null)
+        {
+            winPanel.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 }
