@@ -164,6 +164,7 @@ public class ArcheryGameManager : MonoBehaviour
     public void goHome()
     {
         Time.timeScale = 1f; // unpause before going home
-        SceneManager.
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Home"));
+        SceneManager.UnloadSceneAsync("archery");
     }
 }
