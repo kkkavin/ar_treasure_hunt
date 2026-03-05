@@ -160,5 +160,9 @@ public class ArcheryGameManager : MonoBehaviour
     // expose for other scripts
     public int CurrentLevel => currentLevel;
 
-    public 
+    public void goHome()
+    {
+        // This will trigger the HomeGameManager to load the homepage scene
+        HomeGameManager.Instance.LoadScene("Homepage");
+    }
 }
