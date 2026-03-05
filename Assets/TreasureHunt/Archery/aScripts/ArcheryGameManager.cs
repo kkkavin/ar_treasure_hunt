@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ArcheryGameManager : MonoBehaviour
 {
@@ -163,6 +164,6 @@ public class ArcheryGameManager : MonoBehaviour
     public void goHome()
     {
         Time.timeScale = 1f; // unpause before going home
-        HomeGameManager.Instance.ToggleHomepage(true);
+        SceneManager.
     }
 }
