@@ -128,13 +128,6 @@ public class ArcheryGameManager : MonoBehaviour
         ResumeGame();
     }
 
-    public void ResumeFromFinishedLevel2()
-    {
-        finishedLevel2.SetActive(false);
-        LoadLevel(1);
-        ResumeGame();
-    }
-
     // these two methods are for the ImageTargetBehaviour events
     public void OnImageTargetFound()
     {
