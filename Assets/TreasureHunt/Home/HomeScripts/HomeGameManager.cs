@@ -39,7 +39,7 @@ public class HomeGameManager : MonoBehaviour
     }
     public void LoadScene(string sceneName)
     {
-        homepageG.SetActive(false);
+        homepageObject.SetActive(false);
         SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
     }
