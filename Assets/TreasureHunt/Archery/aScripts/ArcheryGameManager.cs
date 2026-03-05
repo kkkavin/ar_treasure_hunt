@@ -14,7 +14,7 @@ public class ArcheryGameManager : MonoBehaviour
     private int currentLevel = 1;
 
     [Header("Physics Settings")]
-    public float hitCooldown = 0.1f;  // reduced cooldown
+    public float hitCooldown = 0.5f;  // reduced cooldown
     private float lastHitTime = -Mathf.Infinity;  // init to far past so first hit always counts
 
     [Header("UI Elements")]
