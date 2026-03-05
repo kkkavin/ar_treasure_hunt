@@ -166,61 +166,52 @@ public class ArrowLogic : MonoBehaviour
     }
 
     void ProcessHit(Collider targetCollider, Vector3 contactPoint, Vector3 contactNormal)
+{
+    // LOCK 1: Immediate exit if already hit
+    if (hasHit) return;
+    hasHit = true; 
+
+    // LOCK 2: Kill the collider immediately so the moving target 
+    // literally cannot touch this arrow anymore.
+    var col = GetComponent<Collider>();
+    if (col != null) col.enabled = false;
+
+    // LOCK 3: Total Physics Shutdown
+    if (rb != null)
     {
-        if (hasHit) return;
-
-        if (gameManager != null && Camera.main != null)
-        {
-            float dist = Vector3.Distance(Camera.main.transform.position, targetCollider.transform.position);
-            if (dist < ProximityWarning.SafeDistance) return;
-        }
-
-        hasHit = true;
-
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-            rb.interpolation = RigidbodyInterpolation.None;
-            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-        }
-
-        const float penetration = 0.02f;
-        Vector3 finalPosition = contactPoint + contactNormal * penetration;
-
-        // stable rotation: orient arrow into the surface instead of outwards
-        // normals point out of the surface, so we flip it to make the arrow tip face the
-        // impact direction. this prevents a 180° y‑axis flip when the solver chooses an
-        // arbitrary up vector later.
-        Quaternion finalRotation = GetStableRotation(-contactNormal);
-
-        // slide the arrow forward along its forward axis so only the tip is embedded.
-        // `embedDepth` is adjustable from the inspector; positive values move the arrow
-        // into the surface direction (which is `finalRotation.forward`).
-        finalPosition += (finalRotation * Vector3.forward) * embedDepth;
-
-        // always detach first and set world pose
-        transform.SetParent(null, false);
-        transform.position = finalPosition;
-        transform.rotation = finalRotation;
-
-        // in level 2, parent with world pose preserved so arrow follows animation
-        if (gameManager != null && gameManager.CurrentLevel == 2)
-        {
-            transform.SetParent(targetCollider.transform, true);  // worldPositionStays = true
-        }
-
-        if (arrowAudioSource != null && hitSoundClip != null)
-            arrowAudioSource.PlayOneShot(hitSoundClip);
-
-        FindObjectOfType<ArrowSpawner>()?.SpawnArrow();
-        gameManager?.RegisterHit();
-
-        var col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
+        rb.isKinematic = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.interpolation = RigidbodyInterpolation.None;
+        // Stop the engine from even looking at this rigidbody
+        rb.detectCollisions = false; 
     }
 
+    // --- Rest of your positioning logic ---
+    if (gameManager != null && Camera.main != null)
+    {
+        float dist = Vector3.Distance(Camera.main.transform.position, targetCollider.transform.position);
+        if (dist < 1.0f) return; // Simplified proximity check
+    }
+
+    // Stick to target
+    transform.position = contactPoint + (contactNormal * embedDepth);
+    transform.rotation = GetStableRotation(-contactNormal);
+
+    if (gameManager != null && gameManager.CurrentLevel == 2)
+    {
+        transform.SetParent(targetCollider.transform, true);
+    }
+
+    // Audio and Scoring
+    if (arrowAudioSource != null && hitSoundClip != null)
+        arrowAudioSource.PlayOneShot(hitSoundClip);
+
+    gameManager?.RegisterHit();
+    
+    // Spawn next arrow
+    FindObjectOfType<ArrowSpawner>()?.SpawnArrow();
+}
     /// <summary>
     /// Calculate a stable rotation that points the arrow forward along the contact normal,
     /// avoiding gimbal lock and flipping at edge cases.
