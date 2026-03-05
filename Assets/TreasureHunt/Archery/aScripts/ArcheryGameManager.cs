@@ -162,7 +162,5 @@ public class ArcheryGameManager : MonoBehaviour
 
     public void goHome()
     {
-        // This will trigger the HomeGameManager to load the homepage scene
-        HomeGameManager.Instance.LoadScene("home");
     }
 }
