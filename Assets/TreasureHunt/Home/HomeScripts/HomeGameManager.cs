@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class HomeGameManager : MonoBehaviour
 {
     public GameObject homepage;
-    public static GameManager Instance;
+    public static HomeGameManager Instance;
 
     // This is the "Registry" slot where the Worker will plug itself in
     [Header("Registry")]
