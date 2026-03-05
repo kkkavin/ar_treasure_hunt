@@ -157,14 +157,13 @@ public class ArrowLogic : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other)
-{
-    // If we hit a target trigger, treat it exactly like a collision
-    if (other.gameObject.CompareTag("Target") && !hasHit)
     {
-        // Use the arrow's current position as the contact point
-        ProcessHit(other, transform.position, -transform.forward);
+        if (other.gameObject.CompareTag("Target"))
+        {
+            if (rb != null)
+                rb.interpolation = RigidbodyInterpolation.None;
+        }
     }
-}
 
     void ProcessHit(Collider targetCollider, Vector3 contactPoint, Vector3 contactNormal)
     {
