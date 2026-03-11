@@ -90,11 +90,4 @@ public class MazeGameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
     }
-
-    public void goHome()
-    {
-        Time.timeScale = 1f; // unpause before going home
-        winPanel.SetActive(false);
-        SceneManager.LoadScene("Home", LoadSceneMode.Single);
-    }
 }

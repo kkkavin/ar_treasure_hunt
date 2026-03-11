@@ -154,11 +154,4 @@ public class ArcheryGameManager : MonoBehaviour
 
     // expose for other scripts
     public int CurrentLevel => currentLevel;
-
-    public void goHome()
-    {
-        Time.timeScale = 1f; // unpause before going home
-        finishedLevel2.SetActive(false);
-        SceneManager.LoadScene("Home", LoadSceneMode.Single);
-    }
 }
